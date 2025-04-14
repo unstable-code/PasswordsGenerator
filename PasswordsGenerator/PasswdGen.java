@@ -714,6 +714,9 @@ public class PasswdGen extends WindowAdapter {
                             break;
                         case "count":
                             try {
+                                if (parameter.length != 2) {
+                                    throw new NumberFormatException("unexpected EOL without generatePassword count number");
+                                }
                                 int input = Integer.parseInt(parameter[1].trim());
                                 if(input > 0 && input < 17) {
                                     createPassword = input;
@@ -722,11 +725,15 @@ public class PasswdGen extends WindowAdapter {
                                     throw new NumberFormatException("For input number: " + input);
                                 }
                             } catch (NumberFormatException e) {
-                                formatedLogcat("ERR", "비밀번호 생성 수를 설정하는 중 예외 발생: " + e.toString() + "<br>&emsp;" + parameter[1].trim() + " (은)는 비밀번호 생성 수를 설정할 수 있는 올바른 숫자가 아닙니다. ");
+                                if (parameter.length == 2) {
+                                    formatedLogcat("ERR", "비밀번호 생성 수를 설정하는 중 예외 발생: " + e.toString() + "<br>&emsp;" + parameter[1].trim() + " (은)는 비밀번호 생성 수를 설정할 수 있는 올바른 숫자가 아닙니다. ");
+                                } else {
+                                    formatedLogcat("ERR", "비밀번호 생성 수를 설정하는 중 예외 발생: " + e.toString() + "<br>&emsp;비밀번호 생성 수를 제공하지 않았습니다.");
+                                }
                             }
                             break;
                         case "verbose":
-                            if(!parameter[1].equals("on") && !parameter[1].equals("off")) {
+                            if(parameter.length != 2 || (!parameter[1].equals("on") && !parameter[1].equals("off"))) {
                                 throw new NullPointerException("Command not found.");
                             }
 
@@ -739,7 +746,7 @@ public class PasswdGen extends WindowAdapter {
                             }
                             break;
                         case "exceptsym":
-                            if(!parameter[1].equals("on") && !parameter[1].equals("off")) {
+                            if(parameter.length != 2 || (!parameter[1].equals("on") && !parameter[1].equals("off"))) {
                                 throw new NullPointerException("Command not found.");
                             }
 
@@ -752,11 +759,15 @@ public class PasswdGen extends WindowAdapter {
                             }
                             break;
                         case "unisym":
-                            if(!parameter[1].equals("on") && !parameter[1].equals("off")) {
+                            if(parameter.length != 2 || (!parameter[1].equals("on") && !parameter[1].equals("off"))) {
                                 throw new NullPointerException("Command not found.");
                             }
 
-                            if(parameter[1].equals("on") && !parameter[2].equals("")) {
+                            if(parameter[1].equals("on") && parameter.length == 2) {
+                                generalSymbol = false;
+                                containUniqueSymbol.setLabel("특수문자 포함");
+                                throw new NullPointerException("The parameter options are ambiguous.");
+                            } else if(parameter[1].equals("on") && parameter.length >= 3) {
                                 boolean isEdited = false;
                                 StringBuilder convert = new StringBuilder(parameter[2].toLowerCase());
                                 boolean flag = false;
@@ -831,10 +842,6 @@ public class PasswdGen extends WindowAdapter {
                                 }
                                 generalSymbol = true;
                                 containUniqueSymbol.setLabel("일부 특수문자 포함");
-                            } else if(parameter[1].equals("on") && parameter[2].equals("")) {
-                                generalSymbol = false;
-                                containUniqueSymbol.setLabel("특수문자 포함");
-                                throw new NullPointerException("The parameter options are ambiguous.");
                             } else {
                                 generalSymbol = false;
                                 exceptUniqueSymbol = "";
