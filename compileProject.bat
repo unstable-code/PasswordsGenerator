@@ -59,5 +59,11 @@ if "%DISABLE_OPEN_FOLDER%" == "TRUE" (
     %SystemRoot%\explorer.exe .
 )
 
+if "%DISABLE_AUTO_EXECUTE%" == "TRUE" (
+    echo [1mNOTE: The Launch passwdGen feature is currently disabled.[0m
+) else (
+    java -jar passwdGen.jar
+)
+
 pause
 exit

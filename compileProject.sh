@@ -83,3 +83,8 @@ else
     echo "NOTE: The Open Working Directory feature is currently disabled."
 fi
 
+if [ "$DISABLE_AUTO_EXECUTE" != "true" ]; then
+    java -jar passwdGen.jar
+else
+    echo "NOTE: The Launch passwdGen feature is currently disabled."
+fi
