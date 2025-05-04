@@ -6,7 +6,7 @@
 - 여담으로 아이디도 이 프로그램을 통해 생성이 가능합니다.
 
 ### 요구사항
-- 프로젝트를 빌드하기 위해 JDK 또는 OpenJDK가 필요합니다.
+- 프로젝트를 빌드하기 위해 [JDK](https://www.oracle.com/kr/java/technologies/downloads/) 또는 [OpenJDK](https://openjdk.org)가 필요합니다.
 - 이 프로그램은 GUI를 사용하므로 CLI기반 시스템에서는 빌드할 수 없습니다.
 
 ### 설치 방법
