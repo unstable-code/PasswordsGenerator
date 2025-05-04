@@ -611,7 +611,7 @@ public class PasswdGen extends WindowAdapter {
                     formatedLogcat("ERR", "비밀번호를 생성하는 도중 예외 발생: " + exception.toString() + "<br>&emsp;" + passwordCount.getText() + " (은)는 비밀번호 길이를 생성할 수 있는 올바른 숫자가 아닙니다. ");
                     showAlert(mainView, mainView.getTitle() + "- 오류", "비밀번호 길이 필드에는 자연수만 입력해야 합니다. 비밀번호 길이 필드를 다시 한번 확인하시길 바랍니다. ");
                 } catch(NullPointerException exception) {
-                    formatedLogcat("ERR", "비밀번호를 생성하는 도중 예외 발생: " + exception.toString() + "<br>&emsp;" + "이 예외를 <span style=\"color:blue;text-decoration:underline;\">https://github.com/HyeongminKim/PasswordsGenerator/issues</span> (@HyeongminKim) 에게 제보하세요."
+                    formatedLogcat("ERR", "비밀번호를 생성하는 도중 예외 발생: " + exception.toString() + "<br>&emsp;" + "이 예외를 <span style=\"color:blue;text-decoration:underline;\">https://github.com/unstable-code/PasswordsGenerator/issues</span> (@unstable-code) 에게 제보하세요."
                             + "<br><&emsp;생성 길이: " + passwordCount.getText() +
                               "<br><&emsp;생성 갯수: " + createPassword +
                               "<br><&emsp;생성됨: " + generated +
@@ -657,7 +657,7 @@ public class PasswdGen extends WindowAdapter {
 
                 devSite.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        openWeb(devInfo, "https://github.com/HyeongminKim/PasswordsGenerator");
+                        openWeb(devInfo, "https://github.com/unstable-code/PasswordsGenerator");
                     }
                 });
                 infoZone.add("North", devName);
