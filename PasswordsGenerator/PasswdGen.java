@@ -759,15 +759,15 @@ public class PasswdGen extends WindowAdapter {
                             }
                             break;
                         case "unisym":
-                            if(parameter.length != 2 || (!parameter[1].equals("on") && !parameter[1].equals("off"))) {
+                            if(!parameter[1].equals("on") && !parameter[1].equals("off")) {
                                 throw new NullPointerException("Command not found.");
                             }
 
-                            if(parameter[1].equals("on") && parameter.length == 2) {
+                            if(parameter[1].equals("on") && parameter.length != 3) {
                                 generalSymbol = false;
                                 containUniqueSymbol.setLabel("특수문자 포함");
                                 throw new NullPointerException("The parameter options are ambiguous.");
-                            } else if(parameter[1].equals("on") && parameter.length >= 3) {
+                            } else if(parameter[1].equals("on")) {
                                 boolean isEdited = false;
                                 StringBuilder convert = new StringBuilder(parameter[2].toLowerCase());
                                 boolean flag = false;
@@ -811,6 +811,7 @@ public class PasswdGen extends WindowAdapter {
                                             for(int k = 0; k < similarSymbol.length(); k++) {
                                                 if(convert.toString().charAt(j) == similarSymbol.charAt(k)) {
                                                     flag = true;
+                                                    break;
                                                 }
                                             }
                                         }
