@@ -646,7 +646,7 @@ public class PasswdGen extends WindowAdapter {
                 devInfo.setLayout(new BorderLayout(1, 2));
                 Panel infoZone = new Panel();
                 infoZone.setLayout(new BorderLayout(1, 2));
-                Label devName = new Label("Hyeongmin Kim", Label.CENTER);
+                Label devName = new Label("unstable-code", Label.CENTER);
                 Button pypl = new Button("Donate with PayPal");
                 Button devSite = new Button("개발자 GitHub 방문");
                 pypl.addActionListener(new ActionListener() {
