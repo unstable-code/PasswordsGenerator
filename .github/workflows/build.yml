@@ -40,7 +40,6 @@ jobs:
       with:
         version: '6.5.3'
         arch: ${{ matrix.qt_arch }}
-        modules: 'qtbase'
         cache: true
 
     - name: Install dependencies (Ubuntu)
