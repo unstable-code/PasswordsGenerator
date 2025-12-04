@@ -1,5 +1,10 @@
 # PasswordsGenerator
+
 [![Build Status](https://github.com/unstable-code/PasswordsGenerator/actions/workflows/build.yml/badge.svg)](https://github.com/unstable-code/PasswordsGenerator/actions/workflows/build.yml)
+[![Release](https://img.shields.io/github/v/release/unstable-code/PasswordsGenerator)](https://github.com/unstable-code/PasswordsGenerator/releases/latest)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue)](#설치-방법)
+[![Language](https://img.shields.io/badge/language-C%2B%2B17-00599C?logo=cplusplus)](CMakeLists.txt)
+[![Qt](https://img.shields.io/badge/Qt-6.5%2B-41CD52?logo=qt)](https://www.qt.io/)
 
 ### 제작 동기 및 사용방법
 - 회원 가입시 매우 다양한 비밀번호 규칙으로 인해 비밀번호를 정하는데 시간이 오래걸려 이 프로그램을 제작하게 되었습니다.
