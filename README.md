@@ -1,5 +1,33 @@
 # PasswordsGenerator
+[![Build Status](https://github.com/unstable-code/PasswordsGenerator/actions/workflows/build.yml/badge.svg)](https://github.com/unstable-code/PasswordsGenerator/actions/workflows/build.yml)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/hmDonate)
+
+## Qt6 C++ 버전 (cpp-qt6-migration 브랜치)
+
+**C++/Qt6로 재구현된 크로스 플랫폼 버전**이 제공됩니다. 아래 플랫폼에서 사전 빌드된 바이너리를 다운로드할 수 있습니다:
+
+- **Windows** (x64) - [다운로드](../../releases/latest)
+- **Linux** (x64) - [다운로드](../../releases/latest)
+- **macOS** (x64) - [다운로드](../../releases/latest)
+
+### Qt6 버전 빌드 방법
+
+**요구사항:**
+- CMake 3.16 이상
+- Qt 6.5 이상
+- C++17 지원 컴파일러
+
+**빌드 명령어:**
+```bash
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . --config Release
+```
+
+---
+
+## Java 버전 (master 브랜치)
+
 ### 제작 동기 및 사용방법
 - 회원 가입시 매우 다양한 비밀번호 규칙으로 인해 비밀번호를 정하는데 시간이 오래걸려 이 프로그램을 제작하게 되었습니다.
 - 하단 프롬프트에 `help` 를 입력하면 사용가능한 명령을 표시해 줍니다.

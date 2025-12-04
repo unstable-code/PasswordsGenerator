@@ -1,0 +1,148 @@
+name: Build Qt6 Password Generator
+
+on:
+  push:
+    branches: [ master, cpp-qt6-migration ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            qt_arch: gcc_64
+            artifact_name: PasswordGenerator-Linux-x64
+            binary_name: PasswordGenerator
+          - os: windows-latest
+            qt_arch: win64_msvc2019_64
+            artifact_name: PasswordGenerator-Windows-x64
+            binary_name: PasswordGenerator.exe
+          - os: macos-latest
+            qt_arch: clang_64
+            artifact_name: PasswordGenerator-macOS-x64
+            binary_name: PasswordGenerator.app
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Qt6
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: '6.5.3'
+        arch: ${{ matrix.qt_arch }}
+        modules: 'qtbase'
+        cache: true
+
+    - name: Install dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0
+
+    - name: Install dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install cmake ninja
+
+    - name: Install dependencies (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        choco install cmake ninja
+
+    - name: Configure CMake (Linux/macOS)
+      if: runner.os != 'Windows'
+      run: |
+        cd build
+        cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release
+
+    - name: Configure CMake (Windows)
+      if: runner.os == 'Windows'
+      shell: cmd
+      run: |
+        cd build
+        cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: |
+        cd build
+        cmake --build . --config Release
+
+    - name: Prepare artifact (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        cd build
+        mkdir -p deploy
+        cp PasswordGenerator deploy/
+
+    - name: Prepare artifact (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        cd build
+        mkdir deploy
+        cp PasswordGenerator.exe deploy/
+        windeployqt deploy/PasswordGenerator.exe --release --no-translations
+
+    - name: Prepare artifact (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        cd build
+        mkdir -p deploy
+        cp -r PasswordGenerator.app deploy/
+        macdeployqt deploy/PasswordGenerator.app -always-overwrite
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.artifact_name }}
+        path: build/deploy/*
+        retention-days: 30
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+
+    - name: Create archives
+      run: |
+        cd artifacts
+        for dir in */; do
+          dirname="${dir%/}"
+          if [[ "$dirname" == *"Windows"* ]]; then
+            cd "$dirname" && zip -r "../${dirname}.zip" . && cd ..
+          else
+            tar -czf "${dirname}.tar.gz" -C "$dirname" .
+          fi
+        done
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          artifacts/*.zip
+          artifacts/*.tar.gz
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

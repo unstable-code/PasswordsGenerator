@@ -30,3 +30,16 @@ hs_err_pid*
 *.swo
 .idea/
 out/
+
+# Qt/CMake build files
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.user
+*.autosave
+moc_*.cpp
+ui_*.h
+qrc_*.cpp
+*_autogen/
