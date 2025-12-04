@@ -2,7 +2,7 @@ name: Build Qt6 Password Generator
 
 on:
   push:
-    branches: [ master, cpp-qt6-migration ]
+    branches: [ master ]
     tags:
       - 'v*'
   pull_request:
