@@ -66,5 +66,6 @@ endif()
 
 # 설치
 install(TARGETS ${PROJECT_NAME}
+    BUNDLE DESTINATION .
     RUNTIME DESTINATION bin
 )
