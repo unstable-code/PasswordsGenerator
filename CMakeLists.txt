@@ -27,16 +27,35 @@ set(HEADERS
 )
 
 # 실행 파일 생성
-add_executable(${PROJECT_NAME}
-    ${SOURCES}
-    ${HEADERS}
-)
+if(APPLE)
+    # macOS 앱 번들
+    add_executable(${PROJECT_NAME} MACOSX_BUNDLE
+        ${SOURCES}
+        ${HEADERS}
+    )
+elseif(WIN32)
+    # Windows GUI 앱
+    add_executable(${PROJECT_NAME} WIN32
+        ${SOURCES}
+        ${HEADERS}
+    )
+else()
+    # Linux
+    add_executable(${PROJECT_NAME}
+        ${SOURCES}
+        ${HEADERS}
+    )
+endif()
 
 # 인클루드 디렉토리
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 # Qt6 라이브러리 링크
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    Qt6::Widgets
+    Qt6::Gui
+    Qt6::Core
+)
 
 # 릴리스 최적화
 if(CMAKE_BUILD_TYPE STREQUAL "Release")

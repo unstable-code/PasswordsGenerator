@@ -65,13 +65,17 @@ jobs:
         cd build
         cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release
 
+    - name: Setup MSVC (Windows)
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1
+
     - name: Configure CMake (Windows)
       if: runner.os == 'Windows'
       shell: cmd
       run: |
         mkdir build
         cd build
-        cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release
+        cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl
 
     - name: Build
       run: |
