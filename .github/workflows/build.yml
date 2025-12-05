@@ -54,15 +54,14 @@ jobs:
 
     - name: Install Qt6 Static (Windows)
       if: runner.os == 'Windows'
-      uses: jurplel/install-qt-action@v3
-      with:
-        version: '6.5.3'
-        arch: ${{ matrix.qt_arch }}
-        modules: 'qtbase'
-        cache: true
-        setup-python: false
-        tools: 'tools_cmake'
-        set-env: true
+      shell: pwsh
+      run: |
+        # Qt 정적 빌드 다운로드
+        $QtVersion = "6.5.3"
+        $QtStaticUrl = "https://github.com/cristianadam/qt-builds/releases/download/v$QtVersion/qt-$QtVersion-static-msvc2019-x86_64.7z"
+        Invoke-WebRequest -Uri $QtStaticUrl -OutFile qt-static.7z
+        7z x qt-static.7z -oC:\Qt-Static
+        echo "CMAKE_PREFIX_PATH=C:\Qt-Static\qt-$QtVersion-static-msvc2019-x86_64" >> $env:GITHUB_ENV
 
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
@@ -97,7 +96,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DBUILD_STATIC=ON
+        cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DBUILD_STATIC=ON -DCMAKE_PREFIX_PATH=%CMAKE_PREFIX_PATH%
 
     - name: Build
       run: |
