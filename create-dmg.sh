@@ -23,7 +23,7 @@ DMG_SIZE=$((APP_SIZE + 50))
 hdiutil create -size ${DMG_SIZE}m -fs HFS+ -volname "$VOLUME_NAME" "$TMP_DMG"
 
 # DMG 마운트
-MOUNT_DIR=$(hdiutil attach "$TMP_DMG" | grep Volumes | awk '{print $3}')
+MOUNT_DIR=$(hdiutil attach "$TMP_DMG" | grep Volumes | sed 's/.*\/Volumes\//\/Volumes\//')
 
 # 앱 복사
 cp -R "$APP_PATH" "$MOUNT_DIR/"
