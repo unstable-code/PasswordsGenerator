@@ -8,6 +8,16 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+# Windows 정적 링킹 옵션
+option(BUILD_STATIC "Build with static linking (Windows only)" OFF)
+
+if(WIN32 AND BUILD_STATIC)
+    # Windows 정적 빌드 설정
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /INCREMENTAL:NO")
+    add_compile_definitions(QT_STATICPLUGIN)
+endif()
+
 # Qt6 패키지 찾기
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
@@ -56,6 +66,16 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Gui
     Qt6::Core
 )
+
+# Windows 정적 링킹을 위한 Qt 플러그인
+if(WIN32 AND BUILD_STATIC)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        Qt6::QWindowsIntegrationPlugin
+    )
+    # Windows 정적 런타임 링크
+    set_property(TARGET ${PROJECT_NAME} PROPERTY
+        MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
 
 # 릴리스 최적화
 if(CMAKE_BUILD_TYPE STREQUAL "Release")

@@ -44,12 +44,25 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install Qt6
+    - name: Install Qt6 (Linux/macOS)
+      if: runner.os != 'Windows'
       uses: jurplel/install-qt-action@v3
       with:
         version: '6.5.3'
         arch: ${{ matrix.qt_arch }}
         cache: true
+
+    - name: Install Qt6 Static (Windows)
+      if: runner.os == 'Windows'
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: '6.5.3'
+        arch: ${{ matrix.qt_arch }}
+        modules: 'qtbase'
+        cache: true
+        setup-python: false
+        tools: 'tools_cmake'
+        set-env: true
 
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
@@ -84,7 +97,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl
+        cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DBUILD_STATIC=ON
 
     - name: Build
       run: |
@@ -104,16 +117,16 @@ jobs:
       run: |
         cd build
         mkdir deploy
-        cp PasswordGenerator.exe deploy/
-        windeployqt deploy/PasswordGenerator.exe --release --no-translations
+        cp PasswordGenerator.exe deploy/PasswordGenerator-Windows-x64.exe
 
     - name: Prepare artifact (macOS)
       if: runner.os == 'macOS'
       run: |
         cd build
         mkdir -p deploy
-        cp -r PasswordGenerator.app deploy/
-        macdeployqt deploy/PasswordGenerator.app -always-overwrite
+        macdeployqt PasswordGenerator.app -always-overwrite
+        chmod +x ../create-dmg.sh
+        ../create-dmg.sh PasswordGenerator.app deploy/PasswordGenerator-macOS-x64.dmg
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
@@ -137,24 +150,26 @@ jobs:
       with:
         path: artifacts
 
-    - name: Create archives
+    - name: Prepare release files
       run: |
-        cd artifacts
-        for dir in */; do
-          dirname="${dir%/}"
-          if [[ "$dirname" == *"Windows"* ]]; then
-            cd "$dirname" && zip -r "../${dirname}.zip" . && cd ..
-          else
-            tar -czf "${dirname}.tar.gz" -C "$dirname" .
-          fi
-        done
+        mkdir -p release
+        # Windows: exe 파일 직접 복사
+        if [ -d "artifacts/PasswordGenerator-Windows-x64" ]; then
+          cp artifacts/PasswordGenerator-Windows-x64/*.exe release/
+        fi
+        # macOS: DMG 파일 복사
+        if [ -d "artifacts/PasswordGenerator-macOS-x64" ]; then
+          cp artifacts/PasswordGenerator-macOS-x64/*.dmg release/
+        fi
+        # Linux: tar.gz 생성
+        if [ -d "artifacts/PasswordGenerator-Linux-x64" ]; then
+          tar -czf release/PasswordGenerator-Linux-x64.tar.gz -C artifacts/PasswordGenerator-Linux-x64 .
+        fi
 
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        files: |
-          artifacts/*.zip
-          artifacts/*.tar.gz
+        files: release/*
         draft: false
         prerelease: false
         generate_release_notes: true

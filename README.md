@@ -19,9 +19,26 @@
 ### 설치 방법
 **C++/Qt6로 재구현된 크로스 플랫폼 버전**이 제공됩니다. 아래 플랫폼에서 사전 빌드된 바이너리를 다운로드할 수 있습니다:
 
-- **Windows** (x64) - [다운로드](../../releases/latest)
+- **Windows** (x64) - [다운로드](../../releases/latest) - 단일 실행 파일 제공 (정적 링킹)
 - **Linux** (x64) - [다운로드](../../releases/latest)
-- **macOS** (x64) - [다운로드](../../releases/latest)
+- **macOS** (x64) - [다운로드](../../releases/latest) - .app 번들 제공
+
+#### 첫 실행 시 보안 경고 해결 방법
+
+이 앱은 코드 사이닝이 되어있지 않아 첫 실행 시 보안 경고가 표시될 수 있습니다.
+
+**Windows (SmartScreen 경고):**
+1. `Windows의 PC 보호` 창이 표시되면 `추가 정보` 클릭
+2. `실행` 버튼을 클릭하여 실행
+
+**macOS (Gatekeeper 경고):**
+1. 앱을 실행하면 "손상되어 열 수 없습니다" 경고가 표시될 수 있습니다
+2. `시스템 설정` > `개인 정보 보호 및 보안` > `보안` 섹션으로 이동
+3. `확인 없이 열기` 버튼을 클릭
+4. 또는 터미널에서 다음 명령 실행:
+   ```bash
+   xattr -cr /Applications/PasswordGenerator.app
+   ```
 
 ### 빌드 방법
 ```bash
