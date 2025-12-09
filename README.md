@@ -48,7 +48,7 @@ cmake --build . --config Release
 ```
 
 ### Demo
-<img width="758" alt="Screen Shot 2021-11-21 at 0 05 24" src="https://user-images.githubusercontent.com/25660580/142732280-c83b466b-8764-4a0d-bde9-ffd300e81dee.png">
+<img width="1171" height="612" alt="image" src="https://github.com/user-attachments/assets/a029abf0-92bc-4855-bc04-e431e9923e0e" />
 
 ### 참고사항
 - 이 프로그램은 아래 사항을 모두 만족해야 `규정에 부합하지 않음` 경고를 표시하지 않습니다.
