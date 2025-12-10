@@ -279,8 +279,7 @@ void MainWindow::onAboutClicked()
     updateLog();
     QMessageBox::information(this, "개발자에 관하여",
                             "개발자: unstable-code\n"
-                            "GitHub: https://github.com/unstable-code/PasswordsGenerator\n"
-                            "Donate: https://paypal.me/hmDonate");
+                            "GitHub: https://github.com/unstable-code/PasswordsGenerator");
 }
 
 void MainWindow::onCommandEntered()
